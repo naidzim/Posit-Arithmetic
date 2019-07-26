@@ -159,16 +159,17 @@ begin
 	m2 <= zero_tmp2 & mant2;
 	
 -- Sign, Exponent and Mantissa Computation
-mult_s <= s1 or s2;
---mult_m <= m1* m2;
+mult_s <= s1 xor s2;
+mult_m <= std_logic_vector( signed(m1) * signed(m2) );
 mult_m_ovf <= mult_m(2 * (N-es) +1);
 
-r1 <= regime1 when rc1 = '1'
+
+r1 <= "00" & regime1 when rc1 = '1'
 	else std_logic_vector( unsigned(not regime1) + 1); --2's complement
-r2 <= regime1 when rc2 = '1'
-	else std_logic_vector( unsigned(not regime1) + 1); --2's complement
+r2 <= "00" & regime2 when rc2 = '1'
+	else std_logic_vector( unsigned(not regime2) + 1); --2's complement
 	
---mult_e <= (r1 & e1) + (r2 & e2);
+mult_e <= std_logic_vector( signed(r1 & e1) + signed(r2 & e2) );
 
 -- exponent and regime computation 
 
